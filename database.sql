@@ -1,0 +1,20 @@
+CREATE DATABASE IF NOT EXISTS stockify CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE stockify;
+CREATE TABLE IF NOT EXISTS users (
+ id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ username VARCHAR(50) NOT NULL UNIQUE,
+ password_hash VARCHAR(255) NOT NULL
+) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS items (
+ id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ code VARCHAR(30) NOT NULL UNIQUE,
+ name VARCHAR(120) NOT NULL,
+ category VARCHAR(80) NOT NULL,
+ quantity INT UNSIGNED NOT NULL,
+ unit VARCHAR(30) NOT NULL,
+ CONSTRAINT quantity_range CHECK (quantity <= 1000000)
+) ENGINE=InnoDB;
+-- Akun awal untuk pengujian lokal; kata sandi: Admin123!
+INSERT INTO users (username, password_hash)
+SELECT 'admin', '$2y$10$YRwrkB5q88Se3oqrbs0VLebQ8Ff2YEATymIIC1NQ7aC0Yee7kjJmC'
+WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'admin');
